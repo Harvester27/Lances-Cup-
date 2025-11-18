@@ -260,6 +260,11 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
               onPlayerChoice={handlePlayerChoice}
             />
           });
+
+          // DŮLEŽITÉ: Resetuj nextEventTime hned po vytvoření události, aby se neopakovala
+          // Callback onPlayerChoice nastaví nový čas
+          setNextEventTime(null);
+          setNextEventType(null);
         }
       }
       
@@ -913,6 +918,11 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
               onPlayerChoice={handlePlayerChoice}
             />
           });
+
+          // DŮLEŽITÉ: Resetuj nextEventTime hned po vytvoření události, aby se neopakovala
+          // Callback onPlayerChoice nastaví nový čas
+          setNextEventTime(null);
+          setNextEventType(null);
         }
       }
     }

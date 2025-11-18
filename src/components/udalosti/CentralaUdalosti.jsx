@@ -185,36 +185,81 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
       if (nextEventType === 'stredni_pasmo') {
         const winningTeam = lastAttackingTeam || lastFaceoff.winner; // Použij aktuální útočící tým, nebo vítěze buly
         const teamOnIce = onIcePlayers[winningTeam];
-        
+        const opponentTeam = winningTeam === 'lancers' ? 'most' : 'lancers';
+        const opponentOnIce = onIcePlayers[opponentTeam];
+
         if (teamOnIce && teamOnIce.forwards && teamOnIce.forwards.length > 0) {
           // Vyber náhodného útočníka
           const randomIndex = Math.floor(Math.random() * teamOnIce.forwards.length);
           const attacker = teamOnIce.forwards[randomIndex];
-          
+
+          // Handler pro volbu hráče (dump nebo deke)
+          const handlePlayerChoice = (action, result) => {
+            if (action === 'dump') {
+              // Normální nahození - pokračuj souboj o puk za 4 sekundy
+              if (onPuckStatusChange) {
+                onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: false });
+              }
+              setLastAttackingTeam(winningTeam);
+              setNextEventTime(matchTime + 4);
+              setNextEventType('souboj_o_puk');
+            } else if (action === 'deke') {
+              if (result.success) {
+                // ÚSPĚCH - pokračuj v útočném pásmu, střela na bránu za 2 sekundy
+                if (onPuckStatusChange) {
+                  onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: true });
+                }
+                setLastAttackingTeam(winningTeam);
+                setNextEventTime(matchTime + 2);
+                setNextEventType('po_souboji'); // Použijeme existující logiku pro střelu
+
+                // Simulujeme výsledek souboje, jako by útočník vyhrál
+                setBattleResult({
+                  winner: 'attacker',
+                  winType: 'deke',
+                  attacker: {
+                    name: attacker.name,
+                    number: attacker.number,
+                    team: winningTeam
+                  },
+                  defender: result.defender
+                });
+              } else {
+                // NEÚSPĚCH - soupeř má puk ve středním pásmu
+                if (onPuckStatusChange) {
+                  onPuckStatusChange({ team: opponentTeam, zone: 'neutral', hasPuck: true });
+                }
+                // Soupeř se stává útočícím týmem
+                setLastAttackingTeam(opponentTeam);
+                setNextEventTime(matchTime + 3);
+                setNextEventType('stredni_pasmo');
+              }
+            }
+          };
+
           pridejUdalost({
             id: `stredni-${matchTime}`,
             cas: formatMatchTime(matchTime),
-            komponenta: <StredniPasmoUdalosti 
+            komponenta: <StredniPasmoUdalosti
               attacker={{
                 name: attacker.name,
                 number: attacker.number,
                 position: attacker.specificPosition,
-                team: winningTeam
+                team: winningTeam,
+                isUserPlayer: attacker.isUserPlayer,
+                speed: attacker.speed || attacker.attributes?.speed || 70,
+                puckControl: attacker.puckControl || attacker.attributes?.puckControl || 70,
+                agility: attacker.agility || attacker.attributes?.agility || 70,
+                technique: attacker.technique || attacker.attributes?.technique || 70
+              }}
+              opponentLineup={{
+                forwards: opponentOnIce?.forwards || []
               }}
               team={winningTeam}
-            timeSpeed={timeSpeed}
+              timeSpeed={timeSpeed}
+              onPlayerChoice={handlePlayerChoice}
             />
           });
-          
-          // Změň puckStatus - útočné pásmo bez puku
-          if (onPuckStatusChange) {
-            onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: false });
-          }
-          
-          // Zapamatuj si útočící tým a naplánuj souboj o puk za 4 sekundy
-          setLastAttackingTeam(winningTeam);
-          setNextEventTime(matchTime + 4);
-          setNextEventType('souboj_o_puk');
         }
       }
       
@@ -790,37 +835,84 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
       else if (nextEventType === 'po_vhazovani_stred' && centerFaceoffResult) {
         const winningTeam = centerFaceoffResult.winner;
         const teamOnIce = onIcePlayers[winningTeam];
-        
+        const opponentTeam = winningTeam === 'lancers' ? 'most' : 'lancers';
+        const opponentOnIce = onIcePlayers[opponentTeam];
+
         if (teamOnIce && teamOnIce.forwards && teamOnIce.forwards.length > 0) {
           // Vyber náhodného útočníka
           const randomIndex = Math.floor(Math.random() * teamOnIce.forwards.length);
           const attacker = teamOnIce.forwards[randomIndex];
-          
+
+          // Handler pro volbu hráče (dump nebo deke)
+          const handlePlayerChoice = (action, result) => {
+            if (action === 'dump') {
+              // Normální nahození - pokračuj souboj o puk za 4 sekundy
+              if (onPuckStatusChange) {
+                onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: false });
+              }
+              setLastAttackingTeam(winningTeam);
+              setNextEventTime(matchTime + 4);
+              setNextEventType('souboj_o_puk');
+              setCenterFaceoffResult(null);
+            } else if (action === 'deke') {
+              if (result.success) {
+                // ÚSPĚCH - pokračuj v útočném pásmu, střela na bránu za 2 sekundy
+                if (onPuckStatusChange) {
+                  onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: true });
+                }
+                setLastAttackingTeam(winningTeam);
+                setNextEventTime(matchTime + 2);
+                setNextEventType('po_souboji'); // Použijeme existující logiku pro střelu
+
+                // Simulujeme výsledek souboje, jako by útočník vyhrál
+                setBattleResult({
+                  winner: 'attacker',
+                  winType: 'deke',
+                  attacker: {
+                    name: attacker.name,
+                    number: attacker.number,
+                    team: winningTeam
+                  },
+                  defender: result.defender
+                });
+                setCenterFaceoffResult(null);
+              } else {
+                // NEÚSPĚCH - soupeř má puk ve středním pásmu
+                if (onPuckStatusChange) {
+                  onPuckStatusChange({ team: opponentTeam, zone: 'neutral', hasPuck: true });
+                }
+                // Soupeř se stává útočícím týmem
+                setLastAttackingTeam(opponentTeam);
+                setNextEventTime(matchTime + 3);
+                setNextEventType('stredni_pasmo');
+                setCenterFaceoffResult(null);
+              }
+            }
+          };
+
           pridejUdalost({
             id: `stredni-after-goal-${matchTime}`,
             cas: formatMatchTime(matchTime),
-            komponenta: <StredniPasmoUdalosti 
+            komponenta: <StredniPasmoUdalosti
               attacker={{
                 name: attacker.name,
                 number: attacker.number,
                 position: attacker.specificPosition,
-                team: winningTeam
+                team: winningTeam,
+                isUserPlayer: attacker.isUserPlayer,
+                speed: attacker.speed || attacker.attributes?.speed || 70,
+                puckControl: attacker.puckControl || attacker.attributes?.puckControl || 70,
+                agility: attacker.agility || attacker.attributes?.agility || 70,
+                technique: attacker.technique || attacker.attributes?.technique || 70
+              }}
+              opponentLineup={{
+                forwards: opponentOnIce?.forwards || []
               }}
               team={winningTeam}
-            timeSpeed={timeSpeed}
+              timeSpeed={timeSpeed}
+              onPlayerChoice={handlePlayerChoice}
             />
           });
-          
-          // Změň puckStatus - útočné pásmo bez puku
-          if (onPuckStatusChange) {
-            onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: false });
-          }
-          
-          // Zapamatuj si útočící tým a naplánuj souboj o puk za 4 sekundy
-          setLastAttackingTeam(winningTeam);
-          setNextEventTime(matchTime + 4);
-          setNextEventType('souboj_o_puk');
-          setCenterFaceoffResult(null);
         }
       }
     }

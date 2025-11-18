@@ -233,6 +233,16 @@ export default function Zapas() {
     setPuckStatus(newStatus);
   };
 
+  // Callback pro zastavení časomíry (když hráč musí volit)
+  const handlePauseGame = () => {
+    setIsRunning(false);
+  };
+
+  // Callback pro obnovení časomíry (po volbě hráče)
+  const handleResumeGame = () => {
+    setIsRunning(true);
+  };
+
   // Callback pro aktualizaci statistik střel
   const handleShot = (shooterInfo, goalieInfo, isGoal) => {
     const { team: shooterTeam, name: shooterName, number: shooterNumber } = shooterInfo;
@@ -598,16 +608,18 @@ export default function Zapas() {
 
           {/* Střed - Statistiky */}
           <div className="flex flex-col gap-4 overflow-hidden h-full">
-            <ZapasStatistiky 
-              stats={stats} 
-              gameTime={gameTime} 
-              period={period} 
-              lastFaceoff={lastFaceoff} 
-              onIcePlayers={onIcePlayers} 
+            <ZapasStatistiky
+              stats={stats}
+              gameTime={gameTime}
+              period={period}
+              lastFaceoff={lastFaceoff}
+              onIcePlayers={onIcePlayers}
               onPuckStatusChange={handlePuckStatusChange}
               onShot={handleShot}
               onFaceoff={handleFaceoff}
               onCheckShift={handleCheckShift}
+              onPauseGame={handlePauseGame}
+              onResumeGame={handleResumeGame}
               timeSpeed={timeSpeed}
             />
           </div>

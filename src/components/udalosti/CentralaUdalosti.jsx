@@ -7,7 +7,7 @@ import { UtocnePasmoNikdonemapuk } from './UtocnePasmoNikdonemapuk';
 import { UtocnePasmo } from './UtocnePasmo';
 import { ObrannePasmo } from './ObrannePasmo';
 
-export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, onPuckStatusChange, onShot, onFaceoff, onCheckShift, timeSpeed = 1, activePeriodTab = 'active' }) {
+export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, onPuckStatusChange, onShot, onFaceoff, onCheckShift, onPauseGame, onResumeGame, timeSpeed = 1, activePeriodTab = 'active' }) {
   // NOVÝ SYSTÉM - události rozdělené podle třetin
   const [udalostiTretina1, setUdalostiTretina1] = useState([]);
   const [udalostiTretina2, setUdalostiTretina2] = useState([]);
@@ -247,10 +247,12 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
                 position: attacker.specificPosition,
                 team: winningTeam,
                 isUserPlayer: attacker.isUserPlayer,
-                speed: attacker.speed || attacker.attributes?.speed || 70,
-                puckControl: attacker.puckControl || attacker.attributes?.puckControl || 70,
-                agility: attacker.agility || attacker.attributes?.agility || 70,
-                technique: attacker.technique || attacker.attributes?.technique || 70
+                speed: attacker.attributes?.speed || attacker.speed || 70,
+                puckControl: attacker.attributes?.puckControl || attacker.puckControl || 70,
+                agility: attacker.attributes?.agility || attacker.agility || 70,
+                technique: attacker.attributes?.technique || attacker.technique || 70,
+                defense: attacker.attributes?.defense || attacker.defense || 70,
+                takeaway: attacker.attributes?.takeaway || attacker.takeaway || 70
               }}
               opponentLineup={{
                 forwards: opponentOnIce?.forwards || []
@@ -258,6 +260,8 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
               team={winningTeam}
               timeSpeed={timeSpeed}
               onPlayerChoice={handlePlayerChoice}
+              onPauseGame={onPauseGame}
+              onResumeGame={onResumeGame}
             />
           });
 
@@ -905,10 +909,12 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
                 position: attacker.specificPosition,
                 team: winningTeam,
                 isUserPlayer: attacker.isUserPlayer,
-                speed: attacker.speed || attacker.attributes?.speed || 70,
-                puckControl: attacker.puckControl || attacker.attributes?.puckControl || 70,
-                agility: attacker.agility || attacker.attributes?.agility || 70,
-                technique: attacker.technique || attacker.attributes?.technique || 70
+                speed: attacker.attributes?.speed || attacker.speed || 70,
+                puckControl: attacker.attributes?.puckControl || attacker.puckControl || 70,
+                agility: attacker.attributes?.agility || attacker.agility || 70,
+                technique: attacker.attributes?.technique || attacker.technique || 70,
+                defense: attacker.attributes?.defense || attacker.defense || 70,
+                takeaway: attacker.attributes?.takeaway || attacker.takeaway || 70
               }}
               opponentLineup={{
                 forwards: opponentOnIce?.forwards || []
@@ -916,6 +922,8 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
               team={winningTeam}
               timeSpeed={timeSpeed}
               onPlayerChoice={handlePlayerChoice}
+              onPauseGame={onPauseGame}
+              onResumeGame={onResumeGame}
             />
           });
 

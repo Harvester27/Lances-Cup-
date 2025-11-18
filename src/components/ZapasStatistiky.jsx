@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BarChart3, Clock } from 'lucide-react';
 import { CentralaUdalosti } from './udalosti/CentralaUdalosti';
 
-export function ZapasStatistiky({ stats, gameTime, period, lastFaceoff, onIcePlayers, onPuckStatusChange, onShot, onFaceoff, onCheckShift }) {
+export function ZapasStatistiky({ stats, gameTime, period, lastFaceoff, onIcePlayers, onPuckStatusChange, onShot, onFaceoff, onCheckShift, onPauseGame, onResumeGame, timeSpeed }) {
   const [activeTab, setActiveTab] = useState('statistiky');
   const [activePeriodTab, setActivePeriodTab] = useState('active'); // 'active', '1', '2', '3'
 
@@ -138,16 +138,19 @@ export function ZapasStatistiky({ stats, gameTime, period, lastFaceoff, onIcePla
 
         {/* Události - běží vždy na pozadí, jen se skrývají */}
         <div className={activeTab === 'udalosti' ? 'block' : 'hidden'}>
-          <CentralaUdalosti 
-            gameTime={gameTime} 
-            period={period} 
+          <CentralaUdalosti
+            gameTime={gameTime}
+            period={period}
             lastFaceoff={lastFaceoff}
             onIcePlayers={onIcePlayers}
             onPuckStatusChange={onPuckStatusChange}
             onShot={onShot}
             onFaceoff={onFaceoff}
             onCheckShift={onCheckShift}
+            onPauseGame={onPauseGame}
+            onResumeGame={onResumeGame}
             activePeriodTab={activePeriodTab}
+            timeSpeed={timeSpeed}
           />
         </div>
       </div>

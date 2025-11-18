@@ -8,6 +8,8 @@ export function StredniPasmoUdalosti({
   onPlayerChoice,  // Callback pro volbu hráče: (action, result) => void
                    // action: 'dump' | 'deke'
                    // result: { success: boolean, defender: {...}, stats: {...} }
+  onPauseGame,     // Callback pro zastavení časomíry
+  onResumeGame     // Callback pro obnovení časomíry
 }) {
   const [phase, setPhase] = useState('waiting'); // 'waiting' | 'player_choice' | 'deking' | 'dump' | 'success' | 'failure'
   const [selectedAction, setSelectedAction] = useState(null);
@@ -23,6 +25,10 @@ export function StredniPasmoUdalosti({
     if (attacker.isUserPlayer) {
       // Hráč ovládá tohoto útočníka - zobrazíme volbu
       setPhase('player_choice');
+      // ZASTAVIT ČASOMÍRU - hráč musí volit!
+      if (onPauseGame) {
+        onPauseGame();
+      }
     } else {
       // AI hráč - automaticky nahází puk
       setPhase('dump');
@@ -81,6 +87,11 @@ export function StredniPasmoUdalosti({
     setSelectedAction('deke');
     setPhase('deking');
 
+    // OBNOVIT ČASOMÍRU - hráč se rozhodl!
+    if (onResumeGame) {
+      onResumeGame();
+    }
+
     const defender = getRandomOpponentForward();
     const challenge = getDekeChallenge();
 
@@ -129,6 +140,11 @@ export function StredniPasmoUdalosti({
   const handleDump = () => {
     setSelectedAction('dump');
     setPhase('dump');
+
+    // OBNOVIT ČASOMÍRU - hráč se rozhodl!
+    if (onResumeGame) {
+      onResumeGame();
+    }
 
     // Po krátké pauze zavři událost
     setTimeout(() => {

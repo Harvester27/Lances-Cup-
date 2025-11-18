@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ZacatekZapasuUdalosti } from './ZacatekZapasuUdalosti';
 import { KonecTretinyUdalosti } from './KonecTretinyUdalosti';
 import { BuleUdalosti } from './BuleUdalosti';
@@ -8,6 +8,8 @@ import { UtocnePasmo } from './UtocnePasmo';
 import { ObrannePasmo } from './ObrannePasmo';
 
 export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, onPuckStatusChange, onShot, onFaceoff, onCheckShift, onPauseGame, onResumeGame, timeSpeed = 1, activePeriodTab = 'active' }) {
+  // Ref pro aktuální matchTime - použije se v callbacku
+  const matchTimeRef = useRef(0);
   // NOVÝ SYSTÉM - události rozdělené podle třetin
   const [udalostiTretina1, setUdalostiTretina1] = useState([]);
   const [udalostiTretina2, setUdalostiTretina2] = useState([]);
@@ -56,6 +58,9 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
   };
 
   const matchTime = calculateMatchTime();
+
+  // Aktualizuj ref při každé změně matchTime
+  matchTimeRef.current = matchTime;
 
   const formatMatchTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -201,7 +206,7 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
                 onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: false });
               }
               setLastAttackingTeam(winningTeam);
-              setNextEventTime(matchTime + 4);
+              setNextEventTime(matchTimeRef.current + 4);
               setNextEventType('souboj_o_puk');
             } else if (action === 'deke') {
               if (result.success) {
@@ -210,7 +215,7 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
                   onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: true });
                 }
                 setLastAttackingTeam(winningTeam);
-                setNextEventTime(matchTime + 2);
+                setNextEventTime(matchTimeRef.current + 2);
                 setNextEventType('po_souboji'); // Použijeme existující logiku pro střelu
 
                 // Simulujeme výsledek souboje, jako by útočník vyhrál
@@ -231,7 +236,7 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
                 }
                 // Soupeř se stává útočícím týmem
                 setLastAttackingTeam(opponentTeam);
-                setNextEventTime(matchTime + 3);
+                setNextEventTime(matchTimeRef.current + 3);
                 setNextEventType('stredni_pasmo');
               }
             }
@@ -860,7 +865,7 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
                 onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: false });
               }
               setLastAttackingTeam(winningTeam);
-              setNextEventTime(matchTime + 4);
+              setNextEventTime(matchTimeRef.current + 4);
               setNextEventType('souboj_o_puk');
               setCenterFaceoffResult(null);
             } else if (action === 'deke') {
@@ -870,7 +875,7 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
                   onPuckStatusChange({ team: winningTeam, zone: 'offensive', hasPuck: true });
                 }
                 setLastAttackingTeam(winningTeam);
-                setNextEventTime(matchTime + 2);
+                setNextEventTime(matchTimeRef.current + 2);
                 setNextEventType('po_souboji'); // Použijeme existující logiku pro střelu
 
                 // Simulujeme výsledek souboje, jako by útočník vyhrál
@@ -892,7 +897,7 @@ export function CentralaUdalosti({ gameTime, period, lastFaceoff, onIcePlayers, 
                 }
                 // Soupeř se stává útočícím týmem
                 setLastAttackingTeam(opponentTeam);
-                setNextEventTime(matchTime + 3);
+                setNextEventTime(matchTimeRef.current + 3);
                 setNextEventType('stredni_pasmo');
                 setCenterFaceoffResult(null);
               }

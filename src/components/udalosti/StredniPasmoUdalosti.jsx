@@ -96,8 +96,8 @@ export function StredniPasmoUdalosti({
     const challenge = getDekeChallenge();
 
     // Získej hodnoty statistik (s fallbackem)
-    const playerStat = attacker[challenge.playerStat] || 70;
-    const defenderStat = defender[challenge.defenderStat] || 70;
+    const playerStat = attacker.attributes?.[challenge.playerStat] || attacker[challenge.playerStat] || 70;
+    const defenderStat = defender.attributes?.[challenge.defenderStat] || defender[challenge.defenderStat] || 70;
 
     // Hod kostkou (náhodné číslo 0-100)
     const playerRoll = Math.random() * 100;

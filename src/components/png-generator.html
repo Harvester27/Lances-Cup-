@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PNG Generator pro CityMap</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #60a5fa;
+            margin-bottom: 30px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        canvas {
+            border: 2px solid #475569;
+            border-radius: 8px;
+            margin: 10px 0;
+            background: white;
+        }
+        button {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .info {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 PNG Generator pro CityMap</h1>
+        
+        <div class="info">
+            <strong>📝 Instrukce:</strong> Stáhni si všechny PNG obrázky pomocí tlačítek níže. 
+            Ulož je do složky <code>public/assets/city/</code> ve tvém projektu.
+        </div>
+
+        <div class="grid">
+            <!-- Map Background -->
+            <div class="card">
+                <h3>🗺️ Mapa pozadí (1200x800)</h3>
+                <canvas id="mapCanvas" width="1200" height="800"></canvas>
+                <button onclick="downloadPNG('mapCanvas', 'city-map-bg.png')">Stáhnout mapu</button>
+            </div>
+
+            <!-- Tree -->
+            <div class="card">
+                <h3>🌲 Strom (100x120)</h3>
+                <canvas id="treeCanvas" width="100" height="120"></canvas>
+                <button onclick="downloadPNG('treeCanvas', 'tree.png')">Stáhnout strom</button>
+            </div>
+
+            <!-- Building Small -->
+            <div class="card">
+                <h3>🏠 Malý dům (80x100)</h3>
+                <canvas id="houseCanvas" width="80" height="100"></canvas>
+                <button onclick="downloadPNG('houseCanvas', 'house.png')">Stáhnout dům</button>
+            </div>
+
+            <!-- Road Tile -->
+            <div class="card">
+                <h3>🛣️ Dlaždice silnice (200x200)</h3>
+                <canvas id="roadCanvas" width="200" height="200"></canvas>
+                <button onclick="downloadPNG('roadCanvas', 'road-tile.png')">Stáhnout silnici</button>
+            </div>
+
+            <!-- Grass Tile -->
+            <div class="card">
+                <h3>🌿 Dlaždice trávy (200x200)</h3>
+                <canvas id="grassCanvas" width="200" height="200"></canvas>
+                <button onclick="downloadPNG('grassCanvas', 'grass-tile.png')">Stáhnout trávu</button>
+            </div>
+
+            <!-- Car -->
+            <div class="card">
+                <h3>🚗 Auto (60x40)</h3>
+                <canvas id="carCanvas" width="60" height="40"></canvas>
+                <button onclick="downloadPNG('carCanvas', 'car.png')">Stáhnout auto</button>
+            </div>
+        </div>
+
+        <button onclick="downloadAll()" style="width: 100%; margin-top: 30px; padding: 20px; font-size: 18px;">
+            ⬇️ STÁHNOUT VŠECHNY PNG (ZIP)
+        </button>
+    </div>
+
+    <script>
+        // Helper funkce pro isometrickou projekci
+        function toIso(x, y) {
+            return {
+                x: (x - y) * Math.cos(Math.PI / 6),
+                y: (x + y) * Math.sin(Math.PI / 6)
+            };
+        }
+
+        // ========== 1. MAPA POZADÍ ==========
+        function drawMap() {
+            const canvas = document.getElementById('mapCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            // Tráva background
+            const grassGradient = ctx.createLinearGradient(0, 0, width, height);
+            grassGradient.addColorStop(0, '#2d5016');
+            grassGradient.addColorStop(0.5, '#356b1f');
+            grassGradient.addColorStop(1, '#2d5016');
+            ctx.fillStyle = grassGradient;
+            ctx.fillRect(0, 0, width, height);
+
+            // Textura trávy
+            ctx.fillStyle = '#3d6020';
+            for (let i = 0; i < 500; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                ctx.fillRect(x, y, 2, 2);
+            }
+
+            // Hlavní silnice (isometrická)
+            ctx.save();
+            ctx.translate(width / 2, height / 4);
+
+            // Horizontální silnice
+            ctx.fillStyle = '#4a5568';
+            ctx.shadowColor = 'rgba(0,0,0,0.4)';
+            ctx.shadowBlur = 10;
+            ctx.shadowOffsetY = 5;
+            
+            ctx.beginPath();
+            const road1 = toIso(0, 200);
+            const road2 = toIso(800, 200);
+            const road3 = toIso(800, 260);
+            const road4 = toIso(0, 260);
+            ctx.moveTo(road1.x, road1.y);
+            ctx.lineTo(road2.x, road2.y);
+            ctx.lineTo(road3.x, road3.y);
+            ctx.lineTo(road4.x, road4.y);
+            ctx.closePath();
+            ctx.fill();
+
+            // Vertikální silnice
+            ctx.beginPath();
+            const road5 = toIso(350, 0);
+            const road6 = toIso(450, 0);
+            const road7 = toIso(450, 600);
+            const road8 = toIso(350, 600);
+            ctx.moveTo(road5.x, road5.y);
+            ctx.lineTo(road6.x, road6.y);
+            ctx.lineTo(road7.x, road7.y);
+            ctx.lineTo(road8.x, road8.y);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.shadowColor = 'transparent';
+
+            // Čáry na silnici
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([15, 15]);
+            ctx.beginPath();
+            const roadLine1 = toIso(400, 50);
+            const roadLine2 = toIso(400, 550);
+            ctx.moveTo(roadLine1.x, roadLine1.y);
+            ctx.lineTo(roadLine2.x, roadLine2.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.restore();
+        }
+
+        // ========== 2. STROM ==========
+        function drawTree() {
+            const canvas = document.getElementById('treeCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 50;
+            const centerY = 100;
+
+            // Stín
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY + 5, 20, 8, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Kmen
+            ctx.fillStyle = '#654321';
+            ctx.fillRect(centerX - 8, centerY - 35, 16, 40);
+            
+            // Textura kmene
+            ctx.strokeStyle = '#4a3219';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 3; i++) {
+                ctx.beginPath();
+                ctx.moveTo(centerX - 6, centerY - 30 + i * 12);
+                ctx.lineTo(centerX + 6, centerY - 30 + i * 12);
+                ctx.stroke();
+            }
+
+            // Koruna (3 vrstvy)
+            const gradient = ctx.createRadialGradient(centerX, centerY - 50, 5, centerX, centerY - 50, 35);
+            gradient.addColorStop(0, '#34d399');
+            gradient.addColorStop(1, '#059669');
+            
+            ctx.fillStyle = gradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY - 55, 25, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX - 15, centerY - 45, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(centerX + 15, centerY - 45, 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Zvýraznění
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+            ctx.beginPath();
+            ctx.arc(centerX - 5, centerY - 60, 8, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // ========== 3. MALÝ DŮM ==========
+        function drawHouse() {
+            const canvas = document.getElementById('houseCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 40;
+            const centerY = 80;
+
+            // Stín
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY + 5, 30, 10, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Stěny
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(centerX - 25, centerY - 30, 50, 35);
+
+            // Okna
+            ctx.fillStyle = '#60a5fa';
+            ctx.fillRect(centerX - 18, centerY - 22, 12, 12);
+            ctx.fillRect(centerX + 6, centerY - 22, 12, 12);
+
+            // Dveře
+            ctx.fillStyle = '#92400e';
+            ctx.fillRect(centerX - 8, centerY - 15, 16, 20);
+            
+            // Klika
+            ctx.fillStyle = '#fbbf24';
+            ctx.beginPath();
+            ctx.arc(centerX + 4, centerY - 5, 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Střecha
+            ctx.fillStyle = '#7c2d12';
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY - 45);
+            ctx.lineTo(centerX + 30, centerY - 28);
+            ctx.lineTo(centerX - 30, centerY - 28);
+            ctx.closePath();
+            ctx.fill();
+
+            // Okraj střechy
+            ctx.strokeStyle = '#991b1b';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        // ========== 4. DLAŽDICE SILNICE ==========
+        function drawRoad() {
+            const canvas = document.getElementById('roadCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Asfalt
+            ctx.fillStyle = '#4a5568';
+            ctx.fillRect(0, 0, 200, 200);
+
+            // Textura asfaltu
+            ctx.fillStyle = '#374151';
+            for (let i = 0; i < 100; i++) {
+                const x = Math.random() * 200;
+                const y = Math.random() * 200;
+                const size = Math.random() * 3;
+                ctx.fillRect(x, y, size, size);
+            }
+
+            // Čára uprostřed
+            ctx.strokeStyle = '#fbbf24';
+            ctx.lineWidth = 4;
+            ctx.setLineDash([20, 20]);
+            ctx.beginPath();
+            ctx.moveTo(100, 0);
+            ctx.lineTo(100, 200);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Okraje
+            ctx.strokeStyle = '#1f2937';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(2, 2, 196, 196);
+        }
+
+        // ========== 5. DLAŽDICE TRÁVY ==========
+        function drawGrass() {
+            const canvas = document.getElementById('grassCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Zelený gradient
+            const gradient = ctx.createLinearGradient(0, 0, 200, 200);
+            gradient.addColorStop(0, '#2d5016');
+            gradient.addColorStop(0.5, '#356b1f');
+            gradient.addColorStop(1, '#2d5016');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 200, 200);
+
+            // Stébla trávy
+            ctx.strokeStyle = '#3d6020';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 200; i++) {
+                const x = Math.random() * 200;
+                const y = Math.random() * 200;
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+                ctx.lineTo(x + (Math.random() - 0.5) * 4, y - Math.random() * 8);
+                ctx.stroke();
+            }
+
+            // Světlejší tečky
+            ctx.fillStyle = '#4ade80';
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * 200;
+                const y = Math.random() * 200;
+                ctx.beginPath();
+                ctx.arc(x, y, 1, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // ========== 6. AUTO ==========
+        function drawCar() {
+            const canvas = document.getElementById('carCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = 30;
+            const centerY = 20;
+
+            // Stín
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.ellipse(centerX, centerY + 15, 25, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Karoserie
+            ctx.fillStyle = '#3b82f6';
+            ctx.beginPath();
+            ctx.roundRect(centerX - 20, centerY - 5, 40, 20, 5);
+            ctx.fill();
+
+            // Střecha
+            ctx.fillStyle = '#2563eb';
+            ctx.beginPath();
+            ctx.roundRect(centerX - 12, centerY - 12, 24, 15, 3);
+            ctx.fill();
+
+            // Okna
+            ctx.fillStyle = '#60a5fa';
+            ctx.fillRect(centerX - 10, centerY - 10, 8, 8);
+            ctx.fillRect(centerX + 2, centerY - 10, 8, 8);
+
+            // Kola
+            ctx.fillStyle = '#1f2937';
+            ctx.beginPath();
+            ctx.arc(centerX - 12, centerY + 12, 5, 0, Math.PI * 2);
+            ctx.arc(centerX + 12, centerY + 12, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Ráfky
+            ctx.fillStyle = '#6b7280';
+            ctx.beginPath();
+            ctx.arc(centerX - 12, centerY + 12, 3, 0, Math.PI * 2);
+            ctx.arc(centerX + 12, centerY + 12, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Světla
+            ctx.fillStyle = '#fbbf24';
+            ctx.fillRect(centerX + 18, centerY - 2, 3, 6);
+        }
+
+        // Funkce pro stažení PNG
+        function downloadPNG(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Stáhnout všechny
+        function downloadAll() {
+            const canvases = [
+                { id: 'mapCanvas', name: 'city-map-bg.png' },
+                { id: 'treeCanvas', name: 'tree.png' },
+                { id: 'houseCanvas', name: 'house.png' },
+                { id: 'roadCanvas', name: 'road-tile.png' },
+                { id: 'grassCanvas', name: 'grass-tile.png' },
+                { id: 'carCanvas', name: 'car.png' }
+            ];
+
+            canvases.forEach((item, index) => {
+                setTimeout(() => {
+                    downloadPNG(item.id, item.name);
+                }, index * 300);
+            });
+        }
+
+        // Vykreslit všechno po načtení
+        window.onload = function() {
+            drawMap();
+            drawTree();
+            drawHouse();
+            drawRoad();
+            drawGrass();
+            drawCar();
+        };
+    </script>
+</body>
+</html>

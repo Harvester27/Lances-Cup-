@@ -1,0 +1,245 @@
+/* Match2D.css - Styly pro hokejovou hru */
+
+.match-2d-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e293b 100%);
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* ==========================================
+   HLAVIČKA ZÁPASU
+   ========================================== */
+
+.match-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 20px 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.team-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
+}
+
+.team-info.home {
+  flex-direction: row;
+}
+
+.team-info.away {
+  flex-direction: row-reverse;
+}
+
+.team-info h2 {
+  margin: 0;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.score {
+  font-size: 48px;
+  font-weight: bold;
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.5),
+               2px 2px 4px rgba(0, 0, 0, 0.5);
+  min-width: 60px;
+  text-align: center;
+}
+
+/* ==========================================
+   STŘED - ČAS A PAUZA
+   ========================================== */
+
+.game-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 0 40px;
+}
+
+.timer {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+}
+
+.pause-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.pause-btn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+}
+
+.pause-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.4);
+}
+
+/* ==========================================
+   CANVAS - HERNÍ PLOCHA
+   ========================================== */
+
+.game-canvas {
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  cursor: crosshair;
+  background: #e8f4f8;
+  border: 3px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================
+   OVLÁDÁNÍ INFO
+   ========================================== */
+
+.controls-info {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 30px;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.control-group {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.control-group h4 {
+  margin: 0 0 15px 0;
+  color: #fbbf24;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.control-group p {
+  margin: 8px 0;
+  color: #ffffff;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.control-group strong {
+  color: #60a5fa;
+  font-weight: bold;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 1280px) {
+  .match-header {
+    max-width: 100%;
+  }
+  
+  .game-canvas {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .controls-info {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 768px) {
+  .match-header {
+    flex-direction: column;
+    gap: 20px;
+    padding: 15px 20px;
+  }
+  
+  .team-info h2 {
+    font-size: 18px;
+  }
+  
+  .score {
+    font-size: 36px;
+  }
+  
+  .timer {
+    font-size: 28px;
+  }
+  
+  .pause-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+  
+  .control-group {
+    padding: 15px;
+  }
+  
+  .control-group h4 {
+    font-size: 16px;
+  }
+  
+  .control-group p {
+    font-size: 12px;
+  }
+}
+
+/* ==========================================
+   ANIMACE
+   ========================================== */
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.timer {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ==========================================
+   LOADING STATE
+   ========================================== */
+
+.match-2d-container > div:first-child {
+  color: white;
+  font-size: 24px;
+  text-align: center;
+}

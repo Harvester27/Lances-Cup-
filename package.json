@@ -1,0 +1,72 @@
+{
+  "name": "hockey-manager",
+  "version": "0.1.0",
+  "description": "Hokejový manažer",
+  "main": "public/electron.js",
+  "author": "Olda",
+  "license": "MIT",
+  "homepage": "./",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron-dev": "concurrently \"cross-env BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-build": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "lucide-react": "^0.469.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.1.1",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8",
+    "tailwindcss": "^3.4.17",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "wait-on": "^8.0.1"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "appId": "cz.stepanovstudios.hockeymanager",
+    "productName": "Hockey Manager 2025",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist-electron"
+    },
+    "files": [
+      "build/**/*",
+      "public/electron.js"
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "build/icon.ico"
+    }
+  }
+}

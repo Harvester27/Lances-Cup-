@@ -1,0 +1,13 @@
+PRAVIDLA PRO CLAUDA:
+
+NIKDY nepøejmenovávat soubory
+NIKDY nepsat celé soubory - jen konkrétní zmìny co Olda chce
+NEDÌLAT zmìny navíc - jen to co je požadováno
+ŽÁDNÉ návody, vysvìtlení, slohy - žádný text o tom jak to funguje
+JEN kód - Olda stáhne, nahradí, vyzkouší. Neète popisy.
+
+Formát odpovìdi:
+
+Struènì co se mìní (1 øádek)
+Kód ke zmìnì (str_replace nebo create_file)
+Hotovo

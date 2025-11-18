@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Souhrn souborů – složka city</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #0f172a;
+        color: #e2e8f0;
+        margin: 0;
+        padding: 32px;
+        line-height: 1.6;
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 28px;
+        color: #38bdf8;
+      }
+      section {
+        margin-bottom: 28px;
+        border: 1px solid #1e293b;
+        border-radius: 12px;
+        padding: 20px;
+        background: #1e293b;
+      }
+      h2 {
+        margin-top: 0;
+        font-size: 22px;
+        color: #fcd34d;
+      }
+      h3 {
+        margin-bottom: 6px;
+        color: #fbbf24;
+      }
+      ul {
+        margin: 6px 0 14px 18px;
+        padding: 0;
+      }
+      li {
+        margin-bottom: 4px;
+      }
+      code {
+        background: #0f172a;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #f8fafc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Souhrn souborů ve složce <code>src/components/city</code></h1>
+    <p>
+      Přehled hlavních modulů, komponent a helperů používaných v editoru města.
+      U každého souboru najdeš krátký popis toho, co má na starosti a jak zapadá
+      do projektu.
+    </p>
+
+    <section>
+      <h2>Kořenové soubory</h2>
+      <h3>CityMap.js</h3>
+      <ul>
+        <li>Hlavní React komponenta celé hry.</li>
+        <li>
+          Orchestrace UI (sidebar, top bar) + napojení na hooky
+          <code>useMapSlots</code> a <code>useCityScene</code>.
+        </li>
+        <li>Řeší stav vybraných tvarů, objektů, undo historii atd.</li>
+      </ul>
+
+      <h3>buildingHelpers.js</h3>
+      <ul>
+        <li>Vytváření finálních 3D objektů (boxy, dveře, hřiště...).</li>
+        <li>Ukládání / načítání z <code>localStorage</code>, správa undo dat.</li>
+      </ul>
+
+      <h3>sceneSetup.js</h3>
+      <ul>
+        <li>Low-level práce se scénou Three.js (ghost objekty, raycasting, kolize).</li>
+        <li>Používá ho hook <code>useCityScene</code>.</li>
+      </ul>
+
+      <h3>materialHelpers.js</h3>
+      <ul>
+        <li>Definice všech materiálů (dřevo, kov, sklo, led...).</li>
+        <li>Vrací instance <code>THREE.Material</code> podle typu a barvy.</li>
+      </ul>
+
+      <h3>Clouds.js, SunSystem.js, MoonSystem.js, createMoonTexture.js</h3>
+      <ul>
+        <li>Custom efekty pro počasí, slunce a měsíc.</li>
+        <li>Starají se o animace oblohy a denní doby.</li>
+      </ul>
+
+      <h3>FirstPersonControls.js</h3>
+      <ul>
+        <li>Lehce upravená verze ovládání z Three.js.</li>
+        <li>Používá se při přepnutí do režimu první osoby (klávesa V).</li>
+      </ul>
+
+      <h3>hockeyTextures.js</h3>
+      <ul>
+        <li>Generování dynamických textur pro hokejové kresby (vhazování, čáry...).</li>
+      </ul>
+
+      <h3>CharacterEditor.jsx</h3>
+      <ul>
+        <li>Samostatný editor postavy (využívá stejné prostředí jako hra).</li>
+      </ul>
+
+      <h3>Instrukce pro Claude.txt</h3>
+      <ul>
+        <li>Interní poznámky, které se zobrazí při otevření souboru.</li>
+      </ul>
+
+      <h3>souhrn-souboru.html</h3>
+      <ul>
+        <li>Tento dokument – rychlá orientace ve struktuře složky.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Složka <code>hooks</code></h2>
+      <h3>useMapSlots.js</h3>
+      <ul>
+        <li>Správa pěti save slotů (výběr, přepínání, generování klíče pro storage).</li>
+        <li>Vrací aktuální slot, pole slotů, setter a helper <code>getCurrentMapKey</code>.</li>
+      </ul>
+      <h3>useCityScene.js</h3>
+      <ul>
+        <li>
+          Kompletní setup Three.js scény – vytváření rendereru, orbit/FP controls,
+          oblohy, ghost objektu, listenerů a animační smyčky.
+        </li>
+        <li>
+          Přesouvá těžkou logiku z <code>CityMap</code> do jediného hooku, který se volá
+          s refs a callbacky.
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Složka <code>sidebar</code></h2>
+      <h3>MapSwitcher.jsx</h3>
+      <ul>
+        <li>Tlačítka pro výběr mapového slotu (Mapa 1–5).</li>
+        <li>Vizualně zvýrazňuje aktivní slot.</li>
+      </ul>
+      <h3>ShapeControls.jsx</h3>
+      <ul>
+        <li>Výběr tvaru (box, dveře, válec, cesty...) + všechny velikostní slidery.</li>
+        <li>Posílá změny do <code>CityMap</code> přes handler props.</li>
+      </ul>
+      <h3>SelectedObjectInspector.jsx</h3>
+      <ul>
+        <li>Panel pro úpravu označeného objektu (barva, materiál, dveře, kresby).</li>
+        <li>Spolupracuje s hokejovými texturami a undo logikou.</li>
+      </ul>
+      <h3>BuildOptionsPanel.jsx</h3>
+      <ul>
+        <li>
+          Vše kolem stavby bez označeného objektu – typ povrchu, okna, barva, materiál,
+          tlačítko “zrušit výběr”.
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Složka <code>topbar</code></h2>
+      <h3>TopBar.jsx</h3>
+      <ul>
+        <li>
+          Celá horní lišta – navigační tlačítka, informace o tvaru, času, počasí,
+          nápovědy ke klávesám a tlačítka Undo / Smazat vše.
+        </li>
+        <li>Je plně deklarativní, stačí jí předat current props z <code>CityMap</code>.</li>
+      </ul>
+    </section>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Souhrn souborů - 3D City Map</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .file-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .file-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .file-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .file-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+
+        .file-title {
+            flex: 1;
+        }
+
+        .file-title h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 5px;
+        }
+
+        .file-type {
+            display: inline-block;
+            background: #e0e7ff;
+            color: #667eea;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .file-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+        }
+
+        .features {
+            margin-top: 20px;
+        }
+
+        .features h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .features li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #555;
+        }
+
+        .features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .functions {
+            background: #f8f9ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .functions h3 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .function-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+        }
+
+        .function-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #667eea;
+            border-left: 3px solid #667eea;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: #f8f9ff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .summary h2 {
+            margin-bottom: 15px;
+            font-size: 2em;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .summary-item h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .summary-item p {
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 Souhrn souborů - 3D City Map</h1>
+            <p class="subtitle">Přehled všech komponent pro 3D mapovou aplikaci s realistickou simulací prostředí</p>
+        </header>
+
+        <!-- Clouds.js -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon">☁️</div>
+                <div class="file-title">
+                    <h2>Clouds.js</h2>
+                    <span class="file-type">Shader System</span>
+                </div>
+            </div>
+            <p class="file-description">
+                Pokročilý systém pro procedurální generování a renderování 3D mraků pomocí GLSL shaderů. 
+                Využívá Perlin noise a fractional Brownian motion (FBM) pro realistický vzhled mraků s animací větru.
+            </p>
+            <div class="features">
+                <h3>🎨 Hlavní vlastnosti</h3>
+                <ul>
+                    <li>Procedurální 3D Perlin noise implementace (SimplexNoise class)</li>
+                    <li>GLSL shader pro real-time rendering mraků</li>
+                    <li>Vrstvený noise (octaves) pro detailní textury</li>
+                    <li>Animace pohybu mraků větrem</li>
+                    <li>Automatické mizení mraků v noci (nejsou osvětlené)</li>
+                    <li>Barvení mraků podle denní doby (bílé ve dne, tmavé v noci, červenožluté při západu)</li>
+                    <li>Mraky zakrývají i slunce (sun blockage)</li>
+                    <li>Fade efekt na horizontu</li>
+                </ul>
+            </div>
+            <div class="functions">
+                <h3>📦 Exportované funkce</h3>
+                <div class="function-list">
+                    <div class="function-item">getCloudShaderChunk()</div>
+                    <div class="function-item">initCloudSystem(skyMaterial, options)</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Presety počasí</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">5</div>
+                    <div class="stat-label">Nastavitelných parametrů</div>
+                </div>
+            </div>
+            <div class="features">
+                <h3>🎛️ Presety</h3>
+                <ul>
+                    <li><strong>clear</strong> - Jasná obloha (coverage: 0.1)</li>
+                    <li><strong>partlyCloudy</strong> - Polojasno (coverage: 0.4)</li>
+                    <li><strong>cloudy</strong> - Zataženo (coverage: 0.75)</li>
+                    <li><strong>overcast</strong> - Zamračeno (coverage: 0.95)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- createMoonTexture.js -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon">🌙</div>
+                <div class="file-title">
+                    <h2>createMoonTexture.js</h2>
+                    <span class="file-type">Texture Generator</span>
+                </div>
+            </div>
+            <p class="file-description">
+                Generátor procedurální textury měsíce s realistickým vzhledem včetně kráterů a tmavých oblastí (maria).
+                Vytváří 1024×1024px canvas texturu bez nutnosti externí image.
+            </p>
+            <div class="features">
+                <h3>🎨 Hlavní vlastnosti</h3>
+                <ul>
+                    <li>Procedurální generování kráterů pomocí noise funkce</li>
+                    <li>Vrstvený noise pro různé velikosti detailů</li>
+                    <li>Velké tmavé oblasti (maria) - simulace měsíčních moří</li>
+                    <li>50 náhodně rozmístěných kráterů s gradientem</li>
+                    <li>Realistické šedé barvy (180-255 brightness)</li>
+                    <li>Výstup: Canvas 1024×1024px</li>
+                </ul>
+            </div>
+            <div class="functions">
+                <h3>📦 Exportované funkce</h3>
+                <div class="function-list">
+                    <div class="function-item">createMoonTexture()</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">1024px</div>
+                    <div class="stat-label">Rozlišení textury</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">50</div>
+                    <div class="stat-label">Kráterů</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Noise vrstvy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FirstPersonControls.js -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon">🎮</div>
+                <div class="file-title">
+                    <h2>FirstPersonControls.js</h2>
+                    <span class="file-type">Controls System</span>
+                </div>
+            </div>
+            <p class="file-description">
+                Kompletní systém ovládání první osoby pro chůzi po mapě s podporou myši a klávesnice. 
+                Využívá Pointer Lock API pro plynulé rozhlížení.
+            </p>
+            <div class="features">
+                <h3>🎨 Hlavní vlastnosti</h3>
+                <ul>
+                    <li>WASD / šipky pro pohyb (vpřed, vzad, vlevo, vpravo)</li>
+                    <li>Mezerník pro pohyb nahoru</li>
+                    <li>Shift pro pohyb dolů</li>
+                    <li>Myš pro rozhlížení (Pointer Lock API)</li>
+                    <li>Omezení vertikální rotace (nelze se překlopit)</li>
+                    <li>Nastavitelná rychlost pohybu a citlivost myši</li>
+                    <li>Automatické udržování minimální výšky (1.7m - výška očí)</li>
+                    <li>Metody connect() a disconnect() pro aktivaci/deaktivaci</li>
+                </ul>
+            </div>
+            <div class="functions">
+                <h3>📦 Metody třídy</h3>
+                <div class="function-list">
+                    <div class="function-item">connect()</div>
+                    <div class="function-item">disconnect()</div>
+                    <div class="function-item">update()</div>
+                    <div class="function-item">dispose()</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">0.15</div>
+                    <div class="stat-label">Rychlost pohybu</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">0.002</div>
+                    <div class="stat-label">Citlivost myši</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">1.7m</div>
+                    <div class="stat-label">Výška kamery</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- materialHelpers.js -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon">🎨</div>
+                <div class="file-title">
+                    <h2>materialHelpers.js</h2>
+                    <span class="file-type">Helper Functions</span>
+                </div>
+            </div>
+            <p class="file-description">
+                Utility funkce pro vytváření různých typů Three.js materiálů s přednastavenými vlastnostmi.
+                Podporuje 8 různých typů materiálů včetně ghost režimu (průhlednost).
+            </p>
+            <div class="features">
+                <h3>🎨 Dostupné materiály</h3>
+                <ul>
+                    <li><strong>standard</strong> - MeshPhongMaterial (základní lesklý)</li>
+                    <li><strong>metallic</strong> - MeshStandardMaterial (kovový, lesklý)</li>
+                    <li><strong>matte</strong> - MeshLambertMaterial (matný, nelesklý)</li>
+                    <li><strong>glass</strong> - MeshPhysicalMaterial (průhledné sklo s transmiison)</li>
+                    <li><strong>neon</strong> - MeshStandardMaterial (svítící emissive)</li>
+                    <li><strong>wood</strong> - MeshStandardMaterial (dřevo)</li>
+                    <li><strong>plastic</strong> - MeshPhongMaterial (plastový, lesklý)</li>
+                    <li><strong>ice</strong> - MeshPhysicalMaterial (led s clearcoat)</li>
+                </ul>
+            </div>
+            <div class="functions">
+                <h3>📦 Exportované funkce</h3>
+                <div class="function-list">
+                    <div class="function-item">createMaterial(type, color, forGhost)</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Typů materiálů</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Parametry funkce</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MoonSystem.js -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon">🌕</div>
+                <div class="file-title">
+                    <h2>MoonSystem.js</h2>
+                    <span class="file-type">Astronomical System</span>
+                </div>
+            </div>
+            <p class="file-description">
+                Realistický systém simulace měsíce s astronomicky přesnými výpočty pozice, fází a osvětlení.
+                Používá skutečné konstanty pro Prahu a lunární cyklus.
+            </p>
+            <div class="features">
+                <h3>🎨 Hlavní vlastnosti</h3>
+                <ul>
+                    <li>Realistický výpočet pozice měsíce (azimut + elevace)</li>
+                    <li>Simulace lunárního cyklu (29.53 dne)</li>
+                    <li>8 fází měsíce (nov, dorůstající srpek, první čtvrt, atd.)</li>
+                    <li>Osvětlení měsíce sluncem (DirectionalLight)</li>
+                    <li>Automatické mizení pod horizontem</li>
+                    <li>Fade efekt při východu/západu</li>
+                    <li>Měsíc vždy stejnou stranou k Zemi (lookAt center)</li>
+                    <li>Procedurální textura s krátery</li>
+                </ul>
+            </div>
+            <div class="functions">
+                <h3>📦 Exportované funkce</h3>
+                <div class="function-list">
+                    <div class="function-item">initMoonSystem(scene, startHour, startDay)</div>
+                    <div class="function-item">update(time, day, sunPosition)</div>
+                    <div class="function-item">getPhase()</div>
+                    <div class="function-item">getPhaseDescription()</div>
+                    <div class="function-item">setDay(day)</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">29.53</div>
+                    <div class="stat-label">Dní lunárního cyklu</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">8</div>
+                    <div class="stat-label">Fází měsíce</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">Praha</div>
+                    <div class="stat-label">Lokace (50.08°N)</div>
+                </div>
+            </div>
+            <div class="features">
+                <h3>🌙 Fáze měsíce</h3>
+                <ul>
+                    <li>Nov (New Moon) - 0-0.05 nebo 0.95-1.0</li>
+                    <li>Dorůstající srpek (Waxing Crescent) - 0.05-0.25</li>
+                    <li>První čtvrť (First Quarter) - 0.25-0.30</li>
+                    <li>Dorůstající měsíc (Waxing Gibbous) - 0.30-0.45</li>
+                    <li>Úplněk (Full Moon) - 0.45-0.55</li>
+                    <li>Ubývající měsíc (Waning Gibbous) - 0.55-0.70</li>
+                    <li>Poslední čtvrť (Last Quarter) - 0.70-0.75</li>
+                    <li>Ubývající srpek (Waning Crescent) - 0.75-0.95</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SunSystem.js -->
+        <div class="file-card">
+            <div class="file-header">
+                <div class="file-icon">☀️</div>
+                <div class="file-title">
+                    <h2>SunSystem.js</h2>
+                    <span class="file-type">Astronomical System</span>
+                </div>
+            </div>
+            <p class="file-description">
+                Kompletní systém simulace slunce s realistickými astronomickými výpočty pro letní slunovrat v Praze.
+                Ovládá osvětlení scény, barvy oblohy a denní cyklus.
+            </p>
+            <div class="features">
+                <h3>🎨 Hlavní vlastnosti</h3>
+                <ul>
+                    <li>Realistický výpočet pozice slunce (azimut + elevace)</li>
+                    <li>Simulace letního slunovratu (21. června, deklinace 23.44°)</li>
+                    <li>Dynamické barvy slunce podle elevace (noční tmavá → ranní oranžová → denní žlutá)</li>
+                    <li>Dynamické barvy oblohy (tmavá noc → modrá den)</li>
+                    <li>Červenožlutá záře při východu/západu slunce</li>
+                    <li>Automatické řízení DirectionalLight a AmbientLight</li>
+                    <li>Integrace s cloud systémem (mraky oslabují světlo)</li>
+                    <li>Ovládání času (pause, speed up, slow down)</li>
+                </ul>
+            </div>
+            <div class="functions">
+                <h3>📦 Exportované funkce</h3>
+                <div class="function-list">
+                    <div class="function-item">initSunSystem(scene, lights, skyMaterial, startHour, cloudSystem)</div>
+                    <div class="function-item">update()</div>
+                    <div class="function-item">setTime(newTime)</div>
+                    <div class="function-item">getTime()</div>
+                    <div class="function-item">getSunPosition()</div>
+                    <div class="function-item">speedUp()</div>
+                    <div class="function-item">slowDown()</div>
+                    <div class="function-item">togglePause()</div>
+                    <div class="function-item">isPaused()</div>
+                    <div class="function-item">getSpeed()</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">23.44°</div>
+                    <div class="stat-label">Deklinace slunce</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">Praha</div>
+                    <div class="stat-label">Lokace (50.08°N)</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">21.6.</div>
+                    <div class="stat-label">Letní slunovrat</div>
+                </div>
+            </div>
+            <div class="features">
+                <h3>🌈 Barevné přechody</h3>
+                <ul>
+                    <li><strong>-15° a méně:</strong> Hluboká noc (tmavě modrá #000033)</li>
+                    <li><strong>-15° až -5°:</strong> Pozdní noc/brzký úsvit (tmavě oranžová)</li>
+                    <li><strong>-5° až 5°:</strong> Východ/západ slunce (oranžová až červená)</li>
+                    <li><strong>5° až 15°:</strong> Ranní/večerní (žlutooranžová)</li>
+                    <li><strong>15° a více:</strong> Den (žlutobílá)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Celkový souhrn -->
+        <div class="summary">
+            <h2>📊 Celkový přehled projektu</h2>
+            <p>Kompletní sada modulů pro vytvoření realistické 3D mapové aplikace s dynamickým prostředím a astronomickou přesností.</p>
+            
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <h3>🌤️ Meteorologické systémy</h3>
+                    <p>Procedurální mraky s 4 presety počasí, animací větru a interakcí se světlem. Mraky ovlivňují osvětlení scény a mizí v noci.</p>
+                </div>
+                
+                <div class="summary-item">
+                    <h3>🌍 Astronomické systémy</h3>
+                    <p>Realistická simulace slunce a měsíce s přesnými výpočty pozic pro Prahu. Zahrnuje 8 fází měsíce a dynamické barvy oblohy.</p>
+                </div>
+                
+                <div class="summary-item">
+                    <h3>🎮 Interaktivní ovládání</h3>
+                    <p>First-person controls s WASD pohybem a myší pro rozhlížení. Pointer Lock API pro plynulou kontrolu kamery.</p>
+                </div>
+                
+                <div class="summary-item">
+                    <h3>🎨 Materiálový systém</h3>
+                    <p>8 typů materiálů od základního po pokročilé (glass, ice, neon). Podpora ghost režimu pro průhledné objekty.</p>
+                </div>
+                
+                <div class="summary-item">
+                    <h3>⚡ Výkon</h3>
+                    <p>Optimalizované GLSL shadery pro real-time rendering mraků. Procedurální textury generované za běhu bez externích souborů.</p>
+                </div>
+                
+                <div class="summary-item">
+                    <h3>🔧 Technologie</h3>
+                    <p>Three.js pro 3D rendering, vlastní shader kód v GLSL, Pointer Lock API, Canvas 2D pro procedurální textury.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
+                <p style="text-align: center; opacity: 0.8;">
+                    <strong>Celkem:</strong> 6 modulů | 
+                    <strong>Řádků kódu:</strong> ~1500+ | 
+                    <strong>Exportovaných funkcí:</strong> 25+ |
+                    <strong>Jazyk:</strong> JavaScript (ES6+) + GLSL
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

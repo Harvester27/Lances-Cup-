@@ -1,0 +1,67 @@
+======================================================================
+SEZNAM VŠECH CEST K FOTKÁM HRÁČŮ LANCERS
+======================================================================
+
+Celkem fotek: 35
+
+ 1. /Images/Fotky/Lancers/adam-schubada.png
+ 2. /Images/Fotky/Lancers/ales-kuritka.png
+ 3. /Images/Fotky/Lancers/dan-kacenak.png
+ 4. /Images/Fotky/Lancers/gustav-toman.png
+ 5. /Images/Fotky/Lancers/jakub-seidler.png
+ 6. /Images/Fotky/Lancers/jan-hanus.png
+ 7. /Images/Fotky/Lancers/jan-schubada.png
+ 8. /Images/Fotky/Lancers/jan-svarc.png
+ 9. /Images/Fotky/Lancers/jindrich-belinger.png
+10. /Images/Fotky/Lancers/jiri-belinger.png
+11. /Images/Fotky/Lancers/jiri-matuska.png
+12. /Images/Fotky/Lancers/jiri-moravek.png
+13. /Images/Fotky/Lancers/jiri-salanda.png
+14. /Images/Fotky/Lancers/josef-kamarad.png
+15. /Images/Fotky/Lancers/ladislav-cerny.png
+16. /Images/Fotky/Lancers/lubos-coufal.png
+17. /Images/Fotky/Lancers/lukas-matuska.png
+18. /Images/Fotky/Lancers/lukas-zmeskal.png
+19. /Images/Fotky/Lancers/marian-dlugopolsky.png
+20. /Images/Fotky/Lancers/matejovic.png
+21. /Images/Fotky/Lancers/michaela-novakova.png
+22. /Images/Fotky/Lancers/michal-kores.png
+23. /Images/Fotky/Lancers/oliver-stepanovsky.png
+24. /Images/Fotky/Lancers/ondrej-hruby.png
+25. /Images/Fotky/Lancers/ondrej-kocourek.png
+26. /Images/Fotky/Lancers/pavel-novak.png
+27. /Images/Fotky/Lancers/pavel-schubada-ml.png
+28. /Images/Fotky/Lancers/pavel-schubada-st.png
+29. /Images/Fotky/Lancers/roman-benes.png
+30. /Images/Fotky/Lancers/roman-simek.png
+31. /Images/Fotky/Lancers/stanislav-svarc.png
+32. /Images/Fotky/Lancers/tomas-turecek.png
+33. /Images/Fotky/Lancers/vaclav-materna.png
+34. /Images/Fotky/Lancers/vasek-materna.png
+35. /Images/Fotky/Lancers/vlastimil-nistor.png
+
+======================================================================
+PRAVIDLA PRO NÁZVY SOUBORŮ:
+======================================================================
+- Vždy malá písmena
+- Bez diakritiky (ř→r, í→i, á→a, ě→e, ů→u, atd.)
+- Mezery nahrazeny pomlčkami (-)
+- Přípona .png
+- Formát: jmeno-prijmeni.png
+
+Příklady:
+  Jiří Belinger → jiri-belinger.png
+  Michaela Nováková → michaela-novakova.png
+  Pavel Schubada St. → pavel-schubada-st.png
+
+======================================================================
+DŮLEŽITÉ:
+======================================================================
+✅ Všichni hráči již mají v kódu přidané cesty k fotkám
+✅ Pokud fotka nebude existovat, zobrazí se číslo dresu místo fotky
+✅ Kód automaticky ošetřuje chybějící fotky pomocí fallback mechanismu
+
+Stačí tedy vytvořit fotky a umístit je do složky:
+  /Images/Fotky/Lancers/
+
+======================================================================
